@@ -1,3 +1,5 @@
 # HowdyHack 2019
-while 0 == 0:
+count = 0
+while count == 0:
     print("Yeet")
+    count+=1
