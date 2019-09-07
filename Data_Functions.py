@@ -1,4 +1,4 @@
-def find_avai_class(data, dept, class_num, sec_num):
+def find_avai_class(data, dept, class_num):
     """
     Takes in a given data set and a class.
     Returns an array of the classes that are open of a specific type.
