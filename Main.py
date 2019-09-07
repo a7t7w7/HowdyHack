@@ -1,4 +1,12 @@
 # HowdyHack 2019
+import json
+from pprint import pprint
+from typing import Dict, List
+
+import requests
+
+# Get all terms: https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/classSearch/getTerms?dataType=json&offset=1&max=500
+from requests import Response
 
 
 class CourseData:
@@ -10,28 +18,41 @@ class CourseData:
     def print_data(self):
         print("CRN:", self.crn)
         print("Name:", self.name)
-        print("Title:",self.title)
+        print("Title:", self.title)
 
 
-data_file = "201931.json"
-class_list = []
-
-try:
-    f = open(data_file, "r")
-    f1 = f.readlines()
-    for line in f1:
-        if len(line) > 11 and line[11] == '{':
-            crn = line[3:8]
-        if len(line) > 8 and line[5:9] == "name":
-            name = line[13:-3]
-        if len(line) > 8 and line[5:10] == "title":
-            title = line[14:-3]
-            class_list.append(CourseData(crn, name, title))
-    f.close()
-except FileNotFoundError:
-    print("Error: data file does not exist")
-
-for each in class_list:
-    each.print_data()
+def request_terms() -> List[Dict[str, str]]:
+    """Performs a GET request for all terms in TAMU history"""
+    url = "https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/classSearch/getTerms?dataType=json&offset=1&max=500"
+    response: Response = requests.get(url)
+    return json.loads(response.content)
 
 
+def request_sections(dept: str, course_num: str, cookies):
+    url = f"https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/searchResults/searchResults?txt_subjectcoursecombo={dept+course_num}&txt_term=201931&pageOffset=0&pageMaxSize=500&sortColumn=subjectDescription&sortDirection=asc"
+    response = requests.get(url, cookies=cookies)
+    pprint(json.loads(response.content))
+
+
+def post_term(term_code: str):
+    """Makes a POST request to set the desired term for consequent requests. Returns cookies"""
+    url = "https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/term/search?mode=courseSearch"
+    body = {
+        "dataType": "json",
+        "term": term_code
+    }
+    response: Response = requests.post(url, data=body)
+    return response.cookies
+
+
+def main():
+    terms = request_terms()
+    term_code = terms[0]["code"]
+    term_cookies = post_term(term_code)
+    dept = "CSCE"
+    course_num = "121"
+    request_sections(dept,course_num,term_cookies)
+
+
+if __name__ == '__main__':
+    main()
