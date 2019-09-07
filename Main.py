@@ -31,7 +31,7 @@ def request_terms() -> List[Dict[str, str]]:
 def request_sections(dept: str, course_num: str, cookies):
     url = f"https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/searchResults/searchResults?txt_subjectcoursecombo={dept+course_num}&txt_term=201931&pageOffset=0&pageMaxSize=500&sortColumn=subjectDescription&sortDirection=asc"
     response = requests.get(url, cookies=cookies)
-    pprint(json.loads(response.content))
+    return(json.loads(response.content))
 
 
 def post_term(term_code: str):
@@ -45,14 +45,16 @@ def post_term(term_code: str):
     return response.cookies
 
 
-def main():
+def search(dept: str, course_num: str, sec: str):
     terms = request_terms()
     term_code = terms[0]["code"]
     term_cookies = post_term(term_code)
-    dept = "CSCE"
-    course_num = "121"
-    request_sections(dept,course_num,term_cookies)
+    database = request_sections(dept,course_num,term_cookies)
+    pprint(database)
 
+    for i in database:
+        if i['sequenceNumber'] == '201':
+            print('foundit')
 
 if __name__ == '__main__':
-    main()
+    search('CSCE','121',"501")
