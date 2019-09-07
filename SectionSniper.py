@@ -41,8 +41,10 @@ def search(dept: str, course_num: str, sec: str):
     term_code = terms[0]["code"]
     term_cookies = post_term(term_code)
     database = request_sections(dept,course_num,term_cookies)
-    pprint(database)
-
+    # pprint(database)
+    if database["tamuActualTotal"] == 0:
+        return False
+    #
 
 class Display(Widget):
 
