@@ -43,8 +43,8 @@ def search(dept: str, course_num: str, sec: str):
     database = request_sections(dept,course_num,term_cookies)
     # pprint(database)
     if database["tamuActualTotal"] == 0:
-        return False
         print('INVALID INPUT')
+        return False
     else:
         pprint(database)
     #
