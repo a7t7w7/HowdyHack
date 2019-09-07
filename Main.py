@@ -1,3 +1,3 @@
 # HowdyHack 2019
 
-print("Yeet")
+print("Yeet x2")
