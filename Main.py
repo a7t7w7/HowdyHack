@@ -1,5 +1,5 @@
 # HowdyHack 2019
-
+import json
 
 class CourseData:
     def __init__(self, crn, name, title):
@@ -12,26 +12,15 @@ class CourseData:
         print("Name:", self.name)
         print("Title:",self.title)
 
+database = "201931.json"
+data = json.loads(open(database).read())
 
-data_file = "201931.json"
-class_list = []
+wanted_class = "MATH 251"
 
-try:
-    f = open(data_file, "r")
-    f1 = f.readlines()
-    for line in f1:
-        if len(line) > 11 and line[11] == '{':
-            crn = line[3:8]
-        if len(line) > 8 and line[5:9] == "name":
-            name = line[13:-3]
-        if len(line) > 8 and line[5:10] == "title":
-            title = line[14:-3]
-            class_list.append(CourseData(crn, name, title))
-    f.close()
-except FileNotFoundError:
-    print("Error: data file does not exist")
-
-for each in class_list:
-    each.print_data()
+for CRN in data.values():
+    for key in CRN.keys():
+        if key == "name":
+            if wanted_class in CRN["name"] and CRN["open"] == True:
+                print(CRN[key])
 
 
