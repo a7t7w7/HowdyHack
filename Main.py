@@ -1,10 +1,9 @@
 # HowdyHack 2019
 import json
-from pprint import pprint
 from typing import Dict, List
+from Data_Functions import find_avai_class
 
 import requests
-
 # Get all terms: https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/classSearch/getTerms?dataType=json&offset=1&max=500
 from requests import Response
 
@@ -29,9 +28,9 @@ def request_terms() -> List[Dict[str, str]]:
 
 
 def request_sections(dept: str, course_num: str, cookies):
-    url = f"https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/searchResults/searchResults?txt_subjectcoursecombo={dept+course_num}&txt_term=201931&pageOffset=0&pageMaxSize=500&sortColumn=subjectDescription&sortDirection=asc"
+    url = f"https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/searchResults/searchResults?txt_subjectcoursecombo={dept + course_num}&txt_term=201931&pageOffset=0&pageMaxSize=500&sortColumn=subjectDescription&sortDirection=asc"
     response = requests.get(url, cookies=cookies)
-    pprint(json.loads(response.content))
+    return json.loads(response.content)
 
 
 def post_term(term_code: str):
@@ -51,7 +50,8 @@ def main():
     term_cookies = post_term(term_code)
     dept = "CSCE"
     course_num = "121"
-    request_sections(dept,course_num,term_cookies)
+    data = request_sections(dept, course_num, term_cookies)
+    open_classes = find_avai_class(data, dept, course_num, "201")
 
 
 if __name__ == '__main__':
