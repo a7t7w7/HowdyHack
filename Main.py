@@ -1,3 +1,3 @@
 # HowdyHack 2019
-
-print("Yeet x2")
+while 0 == 0:
+    print("Yeet")
