@@ -44,6 +44,9 @@ def search(dept: str, course_num: str, sec: str):
     # pprint(database)
     if database["tamuActualTotal"] == 0:
         return False
+        print('INVALID INPUT')
+    else:
+        pprint(database)
     #
 
 class Display(Widget):
