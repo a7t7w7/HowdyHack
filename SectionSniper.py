@@ -9,6 +9,7 @@ from pprint import pprint
 from typing import Dict, List
 
 import requests
+from Data_Functions import find_avai_class
 
 # Get all terms: https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/classSearch/getTerms?dataType=json&offset=1&max=500
 from requests import Response
@@ -45,9 +46,10 @@ def search(dept: str, course_num: str, sec: str):
     if database["tamuActualTotal"] == 0:
         print('INVALID INPUT')
         return False
-    else:
-        pprint(database)
-    #
+
+    pprint(database)
+    print(find_avai_class(database, dept, course_num))
+
 
 class Display(Widget):
 
