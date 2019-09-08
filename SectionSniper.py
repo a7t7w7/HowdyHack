@@ -50,17 +50,17 @@ def search(dept: str, course_num: str, sec: str, currently_watching):
     if database["tamuActualTotal"] == 0:
         print('INVALID INPUT')
         return False
-
     # pprint(database)
     allsecs = find_all_class(database, dept, course_num)
     avasecs = find_avai_class(database, dept, course_num)
     if name in avasecs:
         notification.notify(title="Section Available!: ", message=name, app_name="Section Sniper")
-        return True
+        return False
     elif name in allsecs:
         notification.notify(title="Section Unavailable: ", message=name, app_name="Section Sniper")
         if name not in currently_watching:
             currently_watching.append(name)
+            return True
         return False
     else:
         notification.notify(title="Section Does Not Exist: ", message=name, app_name="Section Sniper")
@@ -79,10 +79,14 @@ class Display(Widget):
             search(name, course_num, sec_num, self.currently_watching)
 
     def button_pressed(self):
+        self.ids.department.text = self.ids.department.text.upper()
         print("Department: ", self.ids.department.text)
         print("Course #: ", self.ids.course_num.text)
         print("Section #: ", self.ids.sec_num.text)
-        search(self.ids.department.text, self.ids.course_num.text, self.ids.sec_num.text, self.currently_watching)
+        if (search(self.ids.department.text, self.ids.course_num.text, self.ids.sec_num.text, self.currently_watching)):
+            self.ids.course_queue.text = "Course queue: \n"
+            for each in self.currently_watching:
+                self.ids.course_queue.text += each + "\n"
 
 
 
