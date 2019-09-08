@@ -52,8 +52,6 @@ def search(dept: str, course_num: str, sec: str):
     # pprint(database)
     allsecs = find_all_class(database, dept, course_num)
     avasecs = find_avai_class(database, dept, course_num)
-    print(allsecs)
-    print(avasecs)
     if name in avasecs:
         print("The section has an open spot")
         return True
