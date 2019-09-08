@@ -20,7 +20,7 @@ def find_all_class(data, dept, class_num):
     temp_arr = data["data"]
     for c_ass in temp_arr:
         for stuff in c_ass:
-            if c_ass[stuff] == True:
+            if stuff == "openSection":
                 arr.append(dept + " " + class_num + " " + c_ass["sequenceNumber"])
     return arr
 

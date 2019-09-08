@@ -39,7 +39,7 @@ def post_term(term_code: str):
 
 
 def search(dept: str, course_num: str, sec: str):
-    name = dept + " " + class_num + " " + sec
+    name = dept + " " + course_num + " " + sec
     terms = request_terms()
     term_code = terms[0]["code"]
     term_cookies = post_term(term_code)
@@ -54,9 +54,9 @@ def search(dept: str, course_num: str, sec: str):
     avasecs = find_avai_class(database, dept, course_num)
     print(allsecs)
     print(avasecs)
-    if (allsecs.contains(name) & avasecs.contains(name)) :
-        print("The sec exists and has an open spot")
-    elif (allsecs.contains(name)):
+    if name in avasecs:
+        print("The sec has an open spot")
+    elif name in allsecs:
         print("The sec is full")
     else :
         print("The section doesnt exist")
