@@ -1,3 +1,11 @@
+# HowdyHack 2019
+
+# Team Members:
+# Amanda Walker
+# Nathan Purwosumarto
+# Joshua Jung
+# Nick Saldana
+
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.textinput import TextInput
