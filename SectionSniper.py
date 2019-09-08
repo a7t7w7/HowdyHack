@@ -55,11 +55,14 @@ def search(dept: str, course_num: str, sec: str):
     print(allsecs)
     print(avasecs)
     if name in avasecs:
-        print("The sec has an open spot")
+        print("The section has an open spot")
+        return True
     elif name in allsecs:
-        print("The sec is full")
+        print("The section is full")
+        return False
     else :
         print("The section doesnt exist")
+        return False
 
 
 class Display(Widget):
