@@ -60,7 +60,7 @@ def search(dept: str, course_num: str, sec: str):
     elif name in allsecs:
         print("The section is full")
         return False
-    else :
+    else:
         print("The section doesnt exist")
         return False
 
