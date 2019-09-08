@@ -10,6 +10,7 @@ from typing import Dict, List
 
 import requests
 from Data_Functions import find_avai_class
+from Data_Functions import find_all_class
 
 # Get all terms: https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/classSearch/getTerms?dataType=json&offset=1&max=500
 from requests import Response
@@ -38,6 +39,7 @@ def post_term(term_code: str):
 
 
 def search(dept: str, course_num: str, sec: str):
+    name = dept + " " + class_num + " " + sec
     terms = request_terms()
     term_code = terms[0]["code"]
     term_cookies = post_term(term_code)
@@ -47,8 +49,17 @@ def search(dept: str, course_num: str, sec: str):
         print('INVALID INPUT')
         return False
 
-    pprint(database)
-    print(find_avai_class(database, dept, course_num))
+    # pprint(database)
+    allsecs = find_all_class(database, dept, course_num)
+    avasecs = find_avai_class(database, dept, course_num)
+    print(allsecs)
+    print(avasecs)
+    if (allsecs.contains(name) & avasecs.contains(name)) :
+        print("The sec exists and has an open spot")
+    elif (allsecs.contains(name)):
+        print("The sec is full")
+    else :
+        print("The section doesnt exist")
 
 
 class Display(Widget):
