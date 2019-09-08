@@ -7,7 +7,7 @@ def find_avai_class(data, dept, class_num):
     temp_arr = data["data"]
     for c_ass in temp_arr:
         for key in c_ass:
-            if key == "openSection" and c_ass[stuff] == True:
+            if key == "openSection" and c_ass[key] == True:
                 arr.append(dept + " " + class_num + " " + c_ass["sequenceNumber"])
     return arr
 
