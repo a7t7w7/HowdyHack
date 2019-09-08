@@ -4,19 +4,18 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from kivy.config import Config
-from plyer import notification
-
-
-
 import json
 from pprint import pprint
 from typing import Dict, List
+from plyer import notification
 
 import requests
 from Data_Functions import find_avai_class
+from Data_Functions import find_all_class
 
 # Get all terms: https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/classSearch/getTerms?dataType=json&offset=1&max=500
 from requests import Response
+
 def request_terms() -> List[Dict[str, str]]:
     """Performs a GET request for all terms in TAMU history"""
     url = "https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/classSearch/getTerms?dataType=json&offset=1&max=500"
@@ -41,7 +40,8 @@ def post_term(term_code: str):
     return response.cookies
 
 
-def search(dept: str, course_num: str, sec: str):
+def search(dept: str, course_num: str, sec: str, currently_watching):
+    name = dept + " " + course_num + " " + sec
     terms = request_terms()
     term_code = terms[0]["code"]
     term_cookies = post_term(term_code)
@@ -51,25 +51,38 @@ def search(dept: str, course_num: str, sec: str):
         print('INVALID INPUT')
         return False
 
-    pprint(database)
-    available_classes = find_avai_class(database, dept, course_num)
-    #notification.notify(title = "Sections Available: ", message = str(find_avai_class(database, dept, course_num)), app_name = "Section Sniper")
-
+    # pprint(database)
+    allsecs = find_all_class(database, dept, course_num)
+    avasecs = find_avai_class(database, dept, course_num)
+    if name in avasecs:
+        notification.notify(title="Section Available!: ", message=name, app_name="Section Sniper")
+        return True
+    elif name in allsecs:
+        notification.notify(title="Section Unavailable: ", message=name, app_name="Section Sniper")
+        if name not in currently_watching:
+            currently_watching.append(name)
+        return False
+    else:
+        notification.notify(title="Section Does Not Exist: ", message=name, app_name="Section Sniper")
+        return False
 
 class Display(Widget):
 
     def init(self):
         print("initialize")
-
+        self.currently_watching = []
 
     def update(self, dt):
-        pass
+        for each in self.currently_watching:
+            name,course_num,sec_num = each.split(" ")
+            print(each)
+            search(name, course_num, sec_num, self.currently_watching)
 
     def button_pressed(self):
         print("Department: ", self.ids.department.text)
         print("Course #: ", self.ids.course_num.text)
         print("Section #: ", self.ids.sec_num.text)
-        search(self.ids.department.text, self.ids.course_num.text, self.ids.sec_num.text)
+        search(self.ids.department.text, self.ids.course_num.text, self.ids.sec_num.text, self.currently_watching)
 
 
 
@@ -77,7 +90,7 @@ class SectionSniperApp(App):
     def build(self):
         display = Display()
         display.init()
-        Clock.schedule_interval(display.update, 1.0)
+        Clock.schedule_interval(display.update, 300)
         return display
 
 
