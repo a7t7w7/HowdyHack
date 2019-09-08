@@ -49,8 +49,7 @@ def main():
     terms = request_terms()
     term_code = terms[0]["code"]
     term_cookies = post_term(term_code)
-    dept = "MATH"
-    course_num = "251"
+
     data = request_sections(dept,course_num,term_cookies)
     availible_classes = find_avai_class(data, dept, course_num)
     print(availible_classes)
