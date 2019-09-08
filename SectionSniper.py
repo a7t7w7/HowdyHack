@@ -4,6 +4,10 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from kivy.config import Config
+from plyer import notification
+
+
+
 import json
 from pprint import pprint
 from typing import Dict, List
@@ -48,7 +52,8 @@ def search(dept: str, course_num: str, sec: str):
         return False
 
     pprint(database)
-    print(find_avai_class(database, dept, course_num))
+    available_classes = find_avai_class(database, dept, course_num)
+    #notification.notify(title = "Sections Available: ", message = str(find_avai_class(database, dept, course_num)), app_name = "Section Sniper")
 
 
 class Display(Widget):
